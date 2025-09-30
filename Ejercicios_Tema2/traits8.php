@@ -2,6 +2,7 @@
 /* Crea un trait identificable que aporte una propiedad id y los métodos set y get.
 Haz que tanto Libro como Revista usen este trait y asigna un ID único al crearlos */
 trait Identificable{
+    private static $contador = 1;
     private $id;
 
     public function getId(){
@@ -11,6 +12,11 @@ trait Identificable{
     public function setId($id)
     {
         return $this->id = $id;
+    }
+
+    public function generarId()
+    {
+        return $this->id = static::$contador++;
     }
 }
 interface Prestable
@@ -64,12 +70,12 @@ abstract class MaterialBiblioteca
         }
     }
 
-    public function __construct($titulo, $anio, $autor, $id)
+    public function __construct($titulo, $anio, $autor)
     {
         $this->setTitulo($titulo);
         $this->setAnio($anio);
         $this->setAutor($autor);
-        $this->setId($id);
+        $this->generarId();
     }
 
     public function __destruct()
@@ -87,9 +93,12 @@ abstract class MaterialBiblioteca
 
     abstract public function mostrarInfo();
 }
-class Libro extends MaterialBiblioteca implements Prestable
-{
+class Libro extends MaterialBiblioteca implements Prestable {
     public $estaPrestado = false;
+
+    public function __construct($titulo, $anio, $autor) {
+        parent::__construct($titulo, $anio, $autor);
+    }
 
     public function mostrarInfo()
     {
@@ -124,9 +133,9 @@ class Revista extends Libro
 {
     public $numeroEdicion;
 
-    public function __construct($titulo, $anio, $autor, $id, $numeroEdicion)
+    public function __construct($titulo, $anio, $autor, $numeroEdicion)
     {
-        parent::__construct($titulo, $anio, $autor, $id);
+        parent::__construct($titulo, $anio, $autor);
         $this->numeroEdicion = $numeroEdicion;
     }
 
@@ -136,17 +145,20 @@ class Revista extends Libro
     }
 }
 
-$miLibro = new Libro("El Tesoro de David", 1865, "Charles Spurgeon", 1);
-$miLibro2 = new Libro("Oliver Twist", 1838, "Charles Dickens", 2);
+$miLibro = new Libro("El Tesoro de David", 1865, "Charles Spurgeon");
+$miLibro2 = new Libro("Oliver Twist", 1838, "Charles Dickens");
 
 /* $miLibro->prestar();
 $miLibro->estaPrestado();
 $miLibro->prestar(); */
 
-$miRevista = new Revista("Hola", 2025, "Hola S.L", 4234, 3);
-$miRevista2 = new Revista("Jugón", 2025, "Panini", 222, 4);
+$miRevista = new Revista("Hola", 2025, "Hola S.L", 4234);
+$miRevista2 = new Revista("Jugón", 2025, "Panini", 222);
 
-echo $miRevista->getId();
+echo $miLibro->getId() . "\n";  
+echo $miLibro2->getId() . "\n";  
+echo $miRevista->getId() . "\n"; 
+echo $miRevista2->getId() . "\n";
 
 /* $array = [$miLibro, $miLibro2, $miRevista, $miRevista2];
 mostrarColeccion($array);

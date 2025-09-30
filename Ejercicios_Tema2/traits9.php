@@ -61,7 +61,7 @@ abstract class MaterialBiblioteca
     public function setAnio($anio)
     {
         if ($anio > date("Y")) {
-            echo "ERROR. No puede ser más grande el año que el actual. Año = 0";
+            echo "ERROR. No puede ser más grande el año que el actual. Año = 0\n";
             return $this->anio = 0;
         } else {
             return $this->anio = $anio;
@@ -78,16 +78,12 @@ abstract class MaterialBiblioteca
 
     public function __destruct()
     {
-        echo "Objeto destruido\n";
+        // echo "Objeto destruido\n";
     }
 
     public function esAntiguo()
     {
-        if ($this->anio < 2000) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->anio < 2000;
     }
 
     abstract public function mostrarInfo();
@@ -98,13 +94,13 @@ class Libro extends MaterialBiblioteca implements Prestable
 
     public function mostrarInfo()
     {
-        echo $this->titulo . " (" . $this->anio . ") - " . $this->autor . "\n";
+        echo "Libro: " . $this->titulo . " (" . $this->anio . ") - " . $this->autor . "\n";
     }
 
     public function estaPrestado()
     {
         if ($this->estaPrestado) {
-            echo "Si está prestado\n";
+            echo "Sí está prestado\n";
         } else {
             echo "No está prestado\n";
         }
@@ -113,19 +109,21 @@ class Libro extends MaterialBiblioteca implements Prestable
     {
         if ($this->estaPrestado) {
             $this->estaPrestado = false;
+            echo "Libro devuelto\n";
         }
     }
     public function prestar()
     {
         if (!$this->estaPrestado) {
             $this->estaPrestado = true;
+            echo "Libro prestado\n";
         } else {
             echo "Ya está prestado\n";
         }
     }
 }
 
-class Revista extends Libro
+class Revista extends MaterialBiblioteca
 {
     public $numeroEdicion;
 
@@ -137,43 +135,55 @@ class Revista extends Libro
 
     public function mostrarInfo()
     {
-        echo $this->titulo . " (" . $this->anio . ") - " . $this->autor . ". Edición: " . $this->numeroEdicion . "\n";
+        echo "Revista: " . $this->titulo . " (" . $this->anio . ") - " . $this->autor . ". Edición: " . $this->numeroEdicion . "\n";
     }
 }
 
-class Biblioteca {
+class Biblioteca
+{
     public $arrayMateriales = [];
 
-    public function agregarMateriales(){
-        
+    public function agregarMaterial($material)
+    {
+        $this->arrayMateriales[] = $material;
     }
 
-    public function mostrarMateriales() {
+    public function mostrarMateriales()
+    {
+        foreach ($this->arrayMateriales as $material) {
+            $material->mostrarInfo();
+        }
     }
-    public function buscarPorTitulo($titulo){
 
+    public function buscarPorTitulo($titulo)
+    {
+        foreach ($this->arrayMateriales as $material) {
+            if ($material->getTitulo() == $titulo) {
+                $material->mostrarInfo();
+            }
+        }
     }
-
 }
 
 $miLibro = new Libro("El Tesoro de David", 1865, "Charles Spurgeon", 1);
 $miLibro2 = new Libro("Oliver Twist", 1838, "Charles Dickens", 2);
-
-/* $miLibro->prestar();
-$miLibro->estaPrestado();
-$miLibro->prestar(); */
-
 $miRevista = new Revista("Hola", 2025, "Hola S.L", 4234, 3);
 $miRevista2 = new Revista("Jugón", 2025, "Panini", 222, 4);
 
-echo $miRevista->getId();
+$biblioteca = new Biblioteca();
+$biblioteca->agregarMaterial($miLibro);
+$biblioteca->agregarMaterial($miLibro2);
+$biblioteca->agregarMaterial($miRevista);
+$biblioteca->agregarMaterial($miRevista2);
 
-/* $array = [$miLibro, $miLibro2, $miRevista, $miRevista2];
-mostrarColeccion($array);
+echo "Materiales\n";
+$biblioteca->mostrarMateriales();
 
-function mostrarColeccion($items)
-{
-    foreach ($items as $item) {
-        $item->mostrarInfo();
-    }
-}*/
+echo "\nBuscar 'Oliver'\n";
+$biblioteca->buscarPorTitulo("Oliver");
+
+echo "\nPréstamo de libro\n";
+$miLibro->prestar();
+$miLibro->estaPrestado();
+$miLibro->devolver();
+$miLibro->estaPrestado();
