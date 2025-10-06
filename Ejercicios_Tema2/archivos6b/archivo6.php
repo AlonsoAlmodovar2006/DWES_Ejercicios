@@ -17,13 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["archivos"])) {
         $nombre = $_FILES["archivos"]["name"][$i];
         $tipo = $_FILES["archivos"]["type"][$i];
         $tamanio = $_FILES["archivos"]["size"][$i];
-        $error = $_FILES["archivos"]["tmp_name"][$i];
+        $error = $_FILES["archivos"]["error"][$i];
         if ($tamanio > 2097152) {
             echo "El archivo es más grande de 2MB no podemos seguir.";
         } else {
             $esValido = false;
-            for ($i = 0; $i < count($tiposValidos); $i++) {
-                if ($tipo == $tiposValidos[$i]) {
+            for ($j = 0; $j < count($tiposValidos); $j++) {
+                if ($tipo == $tiposValidos[$j]) {
                     $esValido = true;
                 }
             }
