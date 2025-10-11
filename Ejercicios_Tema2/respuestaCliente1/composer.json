@@ -1,0 +1,21 @@
+{
+    "name": "alonsoad/formulario",
+    "description": "Ejercicio 8.2",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Alonsoad\\Formulario\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alonso Almodóvar",
+            "email": "alonsoalmodovar09@gmail.com"
+        }
+    ],
+    "require": {},
+    "scripts": {
+        "start":"php -S localhost:8000 -t public"
+    }
+}

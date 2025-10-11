@@ -1,0 +1,21 @@
+{
+    "name": "alonsoad/modviscon1",
+    "description": "Ejercicio Punto 10",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Alonsoad\\Modviscon1\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alonso Almodóvar",
+            "email": "alonsoalmodovar09@gmail.com"
+        }
+    ],
+    "require": {},
+    "scripts": {
+        "start": "php -S localhost:8000 -t public"
+    }
+}
